@@ -111,7 +111,7 @@ void SPI_TransferTx16_variable_num_words(spi_inst_t *spi, const uint16_t a[0], u
  {
 
 	  gpio_put (cs_pin,0);	  
-	  spi_write_blocking(spi,a, numwords);
+	  spi_write16_blocking(spi,a, numwords);
       gpio_put (cs_pin,1);
 
  }
