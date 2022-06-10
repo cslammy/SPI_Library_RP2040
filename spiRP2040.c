@@ -14,10 +14,25 @@ port of Spi3.c and h for AVR.
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 
+#define SPI_BITS  8  // bits for each SPI xfer (usually 8 or 16)
+#define SPI_SPEED 500000
+//set speeds
 
+//for audio use 60M (max)
+//int spi_speed = 60000000;
+//for pulseview use about 500K so you can see what you're doing
+int spi_speed = SPI_SPEED;
+
+//set bits per transfer
+uint8_t bits_per_transfer = SPI_BITS;
 //buffers to hold our data
+
+
+
+
 uint16_t data[2]; //16 bits
 uint8_t data8[1]; //8 bits
+uint8_t data8ret[1]; // bits for read return
 
 
     //set pins
@@ -27,11 +42,7 @@ const uint mosi_pin = 19;
 const uint miso_pin = 16;
 
 
-//set speed
-int spi_speed = 100000000;
 
-//set bits per transfer
-uint8_t bits_per_transfer = 16;
 
 void init_spi_master(void)
 {
@@ -53,28 +64,28 @@ gpio_set_function(miso_pin, GPIO_FUNC_SPI);
 }
 
 
-void spi_mode(uint8_t mode, uint8_t spibits)
+void spi_mode(uint8_t mode)
 {
 if (mode == 1)
 	{
-     spi_set_format(spi0,spibits,0,1,SPI_MSB_FIRST);
+     spi_set_format(spi0,SPI_BITS,0,1,SPI_MSB_FIRST);
 	}
 if (mode == 2)
 	{
-     spi_set_format(spi0,spibits,1,0,SPI_MSB_FIRST);
+     spi_set_format(spi0,SPI_BITS,1,0,SPI_MSB_FIRST);
 	}
 if (mode == 3)
 	{
-     spi_set_format(spi0,spibits,1,1,SPI_MSB_FIRST);
+     spi_set_format(spi0,SPI_BITS,1,1,SPI_MSB_FIRST);
 	}
 else
 		{
-        spi_set_format(spi0,spibits,0,0,SPI_MSB_FIRST); // mode 0
+        spi_set_format(spi0,SPI_BITS,0,0,SPI_MSB_FIRST); // mode 0
 		}
 	
 }
 
-void SPI_Transfer(spi_inst_t *spi, const uint8_t a) // single 8bit write 
+void SPI_TransferTx8(spi_inst_t *spi, const uint8_t a) // single 8bit write 
  {
     
 	  data8[0] = a;
@@ -84,6 +95,28 @@ void SPI_Transfer(spi_inst_t *spi, const uint8_t a) // single 8bit write
 
  }
  
+
+void SPI_TransferTx8_variable_num_words(spi_inst_t *spi, const uint8_t a[0], uint8_t numwords) // 8bit write, cs down; variable # of bytes before CSup 
+ {
+    
+	  
+
+	  gpio_put (cs_pin,0);	  
+	  spi_write_blocking(spi,a, numwords);
+      gpio_put (cs_pin,1);
+
+ }
+
+void SPI_TransferTx16_variable_num_words(spi_inst_t *spi, const uint16_t a[0], uint8_t numwords) // csdown, 16 bit writes, cs up; variable # of bytes before CSup 
+ {
+
+	  gpio_put (cs_pin,0);	  
+	  spi_write_blocking(spi,a, numwords);
+      gpio_put (cs_pin,1);
+
+ }
+
+
 void SPI_TransferTx16(spi_inst_t *spi, const uint8_t a,  const uint8_t b)  // 2 8bit sequential writes
  {
 	 
@@ -119,4 +152,27 @@ void  SPI_TransferTx16_SingleCS(spi_inst_t *spi, const uint16_t data) // cs low,
 	  gpio_put (cs_pin,1);
  }
  
-     
+uint8_t SPI_TransferTxRx8(spi_inst_t *spi, uint8_t data8) // CS down, 8 bits, CS UP 
+{
+      
+	  
+	  gpio_put (cs_pin,0);	  
+	   
+      spi_read_blocking(spi, data8, data8ret, 1);
+	  gpio_put (cs_pin,1);
+	  return data8ret[0];
+
+}
+
+uint16_t SPI_TransferTxRx16_SingleCS(spi_inst_t *spi, uint16_t data_in) // cs low, 2 bytes to send to SPI IC, cs high)
+{
+	  gpio_put (cs_pin,0);
+	  
+      uint16_t data16ret = 0;
+      
+      spi_read16_blocking(spi,data_in, &data16ret, 1);
+	
+	  gpio_put (cs_pin,1);
+	  return data16ret;
+
+}
