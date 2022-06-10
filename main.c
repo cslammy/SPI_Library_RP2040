@@ -11,10 +11,10 @@
 #include "spiRP2040.h"
 #include "MCP4921.h"
 
-//what pin is being used for cs?
 
 
- 
+
+  
 
 int main() {
 
@@ -29,19 +29,23 @@ spi_mode(0);
 
 while (5 > 0)
     {
-        /*test 4921
-        for (uint16_t countr = 0; countr < 4095; countr+=200)
+        //test 4921
+        for (uint16_t countr = 0; countr < 4095; countr+=150)  // fundamental about 13k?
             {
             write4921(countr);
-            //sleep_ms(1);
+             sleep_us(100); //about 350 hz
             }
-        */
+        
+       
+       // test 3 byte write
+       /*
        uint8_t b[3];
        b[0] = 0xFF;
        b[1] = 0xF0;
-       b[2] = 0x03;
-       /*test writing 3x 8 bit words */
+       b[2] = 0x03; 
+       
        SPI_TransferTx8_variable_num_words(spi0,b,3);
+       */
     }
 
 }
