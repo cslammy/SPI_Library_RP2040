@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2020 Raspberry Pi (Trading) Ltd.
- *
- * SPDX-License-Identifier: BSD-3-Clause
+ *  *
+ * SPILIB_rp2040
+ * audiodiwhy 6-6-22
+ * library for basic SPI uses for RP2040 dev boards such as pico
+ * example includes MCP4921 write 1K ramp wave (via SPI DAC) and cs down, 3 bytes, cs up
+ * 
+ * 
  */
 
 
 #include "pico/stdlib.h"
-
 #include "stdio.h"
 #include "spiRP2040.h"
 #include "MCP4921.h"
@@ -14,7 +17,7 @@
 
 
 
-  
+  git
 
 int main() {
 
@@ -33,7 +36,7 @@ while (5 > 0)
         for (uint16_t countr = 0; countr < 4095; countr+=150)  // fundamental about 13k?
             {
             write4921(countr);
-             sleep_us(100); //about 350 hz
+             
             }
         
        

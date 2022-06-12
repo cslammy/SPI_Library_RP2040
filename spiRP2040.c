@@ -14,8 +14,8 @@ port of Spi3.c and h for AVR.
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 
-#define SPI_BITS  8  // bits for each SPI xfer (usually 8 or 16)
-#define SPI_SPEED 500000
+#define SPI_BITS  16  // bits for each SPI xfer (usually 8 or 16)
+#define SPI_SPEED 60000000
 //set speeds
 
 //for audio use 60M (max)
@@ -145,9 +145,9 @@ void  SPI_TransferTx16_SingleCS(spi_inst_t *spi, const uint16_t data) // cs low,
    
 	  gpio_put (cs_pin,0);
 	  
-	  uint16_t data16 = data; // create 16 bit buffer
-
-      spi_write16_blocking(spi,&data16, 1);
+	  //uint16_t data16 = data; // create 16 bit buffer
+      //data16 = data;
+      spi_write16_blocking(spi,&data, 1);
 	 
 	  gpio_put (cs_pin,1);
  }

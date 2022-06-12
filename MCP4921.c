@@ -26,11 +26,13 @@ void write4921(uint16_t data4921)
     {
 	
         // code assumes LDAC (4921 pin 5) tied to ground
-		uint16_t data12 = data4921 & 0b0000111111111111; // we only want 12 LSBs
+		//uint16_t data12 = data4921 & 0b0000111111111111; // we only want 12 LSBs
 		
-		
-
+		data4921 &= ~(1 << 15); // must always be zero 
+		data4921 |= (1 << 14) | (1 << 13) | (1 << 12) ;  // buffered ref in, gain = ref; no shutdown
+        SPI_TransferTx16_SingleCS(spi0,data4921);
 	
+		/*
 		uint8_t MSB = (data12 >> 8);
 		MSB |= (1 << 6) | (1 << 5) | (1 << 4) ; // buffered ref in, gain = ref; no shutdown
  
@@ -40,10 +42,10 @@ void write4921(uint16_t data4921)
 		
 		uint16_t final = LSB + (MSB << 8); 
 		//MCP4921 requires 2 8 bit words sent one after the other--CS down, 16 bits, CS up
-
+*/
         
  		//SPI_TransferTx16_SingleCS(spi0,0b0111101011110101);
-        SPI_TransferTx16_SingleCS(spi0,final);
+       // SPI_TransferTx16_SingleCS(spi0,final);
  
 		
 		
