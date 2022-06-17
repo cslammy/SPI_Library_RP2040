@@ -15,7 +15,7 @@ port of Spi3.c and h for AVR.
 #include "hardware/spi.h"
 
 #define SPI_BITS  16  // bits for each SPI xfer (usually 8 or 16)
-#define SPI_SPEED 60000000
+#define SPI_SPEED 1000000
 //set speeds
 
 //for audio use 60M (max)
@@ -152,7 +152,7 @@ void  SPI_TransferTx16_SingleCS(spi_inst_t *spi, const uint16_t data) // cs low,
 	  gpio_put (cs_pin,1);
  }
  
-uint8_t SPI_TransferTxRx8(spi_inst_t *spi, uint8_t data8) // CS down, 8 bits, CS UP 
+uint8_t SPI_TransferTxRx8(spi_inst_t *spi, const uint8_t data8) // CS down, 8 bits, CS UP 
 {
       
 	  
@@ -164,7 +164,7 @@ uint8_t SPI_TransferTxRx8(spi_inst_t *spi, uint8_t data8) // CS down, 8 bits, CS
 
 }
 
-uint16_t SPI_TransferTxRx16_SingleCS(spi_inst_t *spi, uint16_t data_in) // cs low, 2 bytes to send to SPI IC, cs high)
+uint16_t SPI_TransferTxRx16_SingleCS(spi_inst_t *spi, const uint16_t data_in) // cs low, 2 bytes to send to SPI IC, cs high)
 {
 	  gpio_put (cs_pin,0);
 	  

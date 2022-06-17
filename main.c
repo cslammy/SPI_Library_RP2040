@@ -13,15 +13,16 @@
 #include "stdio.h"
 #include "spiRP2040.h"
 #include "MCP4921.h"
+#include "MCP3201.h"
 
 
 
 
-  git
+  
 
 int main() {
-
-
+stdio_init_all();
+uint16_t inputword = 0xFFFF;
 
 
 //initialize SPI
@@ -32,14 +33,15 @@ spi_mode(0);
 
 while (5 > 0)
     {
-        //test 4921
-        for (uint16_t countr = 0; countr < 4095; countr+=150)  // fundamental about 13k?
+        /*test 4921
+        /for (uint16_t countr = 0; countr < 4095; countr+=150)  // fundamental about 13k?
             {
             write4921(countr);
              
             }
         
-       
+       */
+
        // test 3 byte write
        /*
        uint8_t b[3];
@@ -49,6 +51,15 @@ while (5 > 0)
        
        SPI_TransferTx8_variable_num_words(spi0,b,3);
        */
+
+      //test SPI in MCP3201
+      
+      uint16_t MCP3201value = 0;
+      
+        MCP3201value = MCP3201read();
+
+      printf("dataread from MCP3201 is: %d \n",MCP3201value);
+      sleep_ms(100);
     }
 
 }
