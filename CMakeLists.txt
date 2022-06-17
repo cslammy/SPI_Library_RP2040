@@ -14,7 +14,7 @@ pico_sdk_init()
 
 #list out files used
 add_executable(${PROJECT_NAME}
-	main.c MCP4921.c  spiRP2040.c
+	main.c MCP4921.c  spiRP2040.c  MCP3201.c
 	)
 
 #create extra uf2 etc files
@@ -27,5 +27,5 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 #uart fart
-pico_enable_stdio_usb(${PROJECT_NAME} 0)
-pico_enable_stdio_uart(${PROJECT_NAME} 1)
+pico_enable_stdio_usb(${PROJECT_NAME} 1)
+pico_enable_stdio_uart(${PROJECT_NAME} 0)
