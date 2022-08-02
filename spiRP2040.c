@@ -78,7 +78,7 @@ if (mode == 3)
 	{
      spi_set_format(spi0,SPI_BITS,1,1,SPI_MSB_FIRST);
 	}
-else
+if (mode == 0)
 		{
         spi_set_format(spi0,SPI_BITS,0,0,SPI_MSB_FIRST); // mode 0
 		}
